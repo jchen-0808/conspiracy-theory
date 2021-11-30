@@ -1,7 +1,7 @@
 /* Size for brand */
 nav .navbar-brand
 {
-    font-size: xx-large;
+    font-size: x-large;
 }
 
 /* Colors for brand */
@@ -20,4 +20,29 @@ nav .navbar-brand .yellow
 nav .navbar-brand .green
 {
     color: #2e944b;
+}
+
+.container {
+    margin-left: 100px;
+    margin-right: 100px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+.center{
+    text-align: center;
+    color: #5c5c5c
+}
+
+.large{
+    font-size: x-large;
+}
+
+.leftAlign{
+    text-align: left;
+    margin-left: 100px;
+    margin-top: 50px;
+    color: #5c5c5c;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
 }

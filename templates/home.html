@@ -29,7 +29,7 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto mt-2">
-                            <li class="nav-item"><a class="nav-link" href="/home">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
                             <li class="nav-item"><a class="nav-link" href="/quiz">Quiz</a></li>
                             <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
@@ -57,7 +57,25 @@
         {% endif %}
 
         <main class="container-fluid py-5 text-center">
-            {% block main %}{% endblock %}
+            {% block main %}
+            <div>
+                <h2 class="container">A conspiracy theory is an explanation for an event or situation that invokes a conspiracy by sinister and powerful groups, often political in motivation, when other explanations are more probable.</h2>
+            </div>
+            <div class="container leftAlign">
+                <h3>Popular conspiracy theories:</h3>
+                <br>
+                <a class="large" href="https://birdsarentreal.com/">Birds aren't real</a>
+                <br>
+                <a class="large" href="https://www.vox.com/2016/3/8/11179492/ted-cruz-zodiac-killer">Ted Cruz is the zodiac killer</a>
+                <br>
+                <a class="large" href="https://en.wikipedia.org/wiki/Flat_Earth">Earth is flat</a>
+            </div>
+            <div class="container">
+                <h3>Featured posts</h3>
+
+
+            </div>
+            {% endblock %}
         </main>
 
     </body>
