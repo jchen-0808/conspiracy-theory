@@ -50,7 +50,7 @@ def post():
 @app.route("/history")
 @login_required
 def history():
-    return render_template("history.html", historyList=historyList)
+    return render_template("history.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
