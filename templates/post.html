@@ -64,13 +64,17 @@
             </div>
             <div>
                 <form action="/post" id="userPost" method="post">
+                    <h1>Title</h1>
+                    <div>
+                        <textarea form="userName" name="name" id="name"></textarea>
+                    </div>
+                    <h1>Description of conspiracy</h1>
                     <div>
                         <textarea form="userPost" rows="5" cols="50" name="post" id="post"></textarea>
                     </div>
                     <br>
                         <button class="btn btn-primary" type="submit">Post</button>
                 </form>
-
             </div>
             {% endblock %}
         </main>

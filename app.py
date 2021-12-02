@@ -44,7 +44,22 @@ def home():
 @app.route("/post", methods=["GET", "POST"])
 @login_required
 def post():
-    return render_template("post.html")
+    if request.method == "POST":
+        name = request.form.get("name")
+        content = request.form.get("post")
+
+        # ensures all fields are filled
+        if name == "" or content == "":
+            return apology("Please complete all fields")
+
+        rows = db.execute("INSERT INTO theories (name, user, content) VALUES (?, ?, ?)", name, session["user_id"], content)
+        
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("post.html")
 
 
 @app.route("/history")
