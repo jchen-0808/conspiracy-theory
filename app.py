@@ -161,10 +161,10 @@ def register():
         return render_template("register.html")
 
 
-@app.route("/trending", methods=["GET", "POST"])
+@app.route("/recents", methods=["GET", "POST"])
 @login_required
-def trending():
-    return render_template("trending.html")
+def recents ():
+    return render_template("recents.html")
 
 
 @app.route("/change", methods=["GET", "POST"])

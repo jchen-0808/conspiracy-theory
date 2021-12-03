@@ -30,10 +30,10 @@
                     {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/recents">Recents</a></li>
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
                             <li class="nav-item"><a class="nav-link" href="/quiz">Quiz</a></li>
                             <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/trending">Trending</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -64,11 +64,10 @@
             </div>
             <div>
                 <form action="/post" id="userPost" method="post">
-                    <h1>Title</h1>
-                    <div>
-                        <textarea form="userName" name="name" id="name"></textarea>
-                    </div>
-                    <h1>Description of conspiracy</h1>
+                    <h1 class="center">Title</h1>
+                    <input form="userName" name="name" id="name"></input>
+                    <br>
+                    <h2 class="center">Description of conspiracy</h1>
                     <div>
                         <textarea form="userPost" rows="5" cols="50" name="post" id="post"></textarea>
                     </div>
@@ -78,6 +77,10 @@
             </div>
             {% endblock %}
         </main>
+
+        <footer class="mb-5 small text-center text-muted">
+            All posts on this website are not scientific facts. Please do not take anything too seriously
+        </footer>
 
     </body>
 
