@@ -33,7 +33,7 @@
                             <li class="nav-item"><a class="nav-link" href="/recents">Recents</a></li>
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
                             <li class="nav-item"><a class="nav-link" href="/quiz">Quiz</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -57,7 +57,18 @@
         {% endif %}
 
         <main class="container-fluid py-5 text-center">
-            {% block main %}{% endblock %}
+            {% block main %}
+                {% for post in data %}
+                <div class="container grey">
+                    <h1 class="leftAlign crimson">{{ post.name }}</p>
+                    <p class="paragraph black">{{ post.content }}</p>
+                    <p class="author darkgrey">posted by {{ post.user }}</p>
+                    <p class="author darkgrey">{{ post.date }}</p>
+                </div>
+                {% endfor %}
+                    </tbody>
+                </table>
+            {% endblock %}
         </main>
 
         <footer class="mb-5 small text-center text-muted">

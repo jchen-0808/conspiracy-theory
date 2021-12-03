@@ -4,24 +4,6 @@ nav .navbar-brand
     font-size: x-large;
 }
 
-/* Colors for brand */
-nav .navbar-brand .blue
-{
-    color: #537fbe;
-}
-nav .navbar-brand .red
-{
-    color: #ea433b;
-}
-nav .navbar-brand .yellow
-{
-    color: #f5b82e;
-}
-nav .navbar-brand .green
-{
-    color: #2e944b;
-}
-
 .container {
     margin-left: 100px;
     margin-right: 100px;
@@ -32,7 +14,26 @@ nav .navbar-brand .green
 
 .center{
     text-align: center;
+    font-size: large;
     font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+.author{
+    text-align: right;
+    font-size: medium;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    margin-right: 100px;
+}
+
+.crimson{
+    color: #DC143C;
+}
+
+.paragraph{
+    text-align: left;
+    font-size: large;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    margin-left: 50px;
 }
 
 .large{
@@ -41,8 +42,19 @@ nav .navbar-brand .green
 
 .leftAlign{
     text-align: left;
-    margin-left: 100px;
+    font-size: x-large;
     margin-top: 50px;
-    color: #5c5c5c;
     font-family: "Comic Sans MS", "Comic Sans", cursive;
+}
+
+.grey{
+    background-color: #F5F5F5;
+}
+
+.black{
+    color:#000000
+}
+
+.darkgrey{
+    color:#808080
 }

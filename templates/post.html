@@ -33,7 +33,7 @@
                             <li class="nav-item"><a class="nav-link" href="/recents">Recents</a></li>
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
                             <li class="nav-item"><a class="nav-link" href="/quiz">Quiz</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -59,17 +59,20 @@
         <main class="container-fluid py-5 text-center">
             {% block main %}
             <div class="container">
-                <h1>Post your conspiracy theories!</h1>
+                <h1 class="crimson">Post your conspiracy theories!</h1>
                 <br>
             </div>
             <div>
                 <form action="/post" id="userPost" method="post">
                     <h1 class="center">Title</h1>
-                    <input form="userName" name="name" id="name"></input>
+                    <input form="userPost" name="name" id="name"></input>
                     <br>
-                    <h2 class="center">Description of conspiracy</h1>
+                    <br>
                     <div>
-                        <textarea form="userPost" rows="5" cols="50" name="post" id="post"></textarea>
+                        <h2 class="center">Description of conspiracy</h2>
+                        <div>
+                            <textarea form="userPost" rows="10" cols="80" name="post" id="post"></textarea>
+                        </div>
                     </div>
                     <br>
                         <button class="btn btn-primary" type="submit">Post</button>

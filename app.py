@@ -51,21 +51,29 @@ def post():
         # ensures all fields are filled
         if name == "" or content == "":
             return apology("Please complete all fields")
+        
+        user = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
+        username = user[0]["username"]
 
-        rows = db.execute("INSERT INTO theories (name, user, content) VALUES (?, ?, ?)", name, session["user_id"], content)
+        date = db.execute("SELECT DATETIME()")
+
+        db.execute("INSERT INTO theories (name, user, content, date, id) VALUES (?, ?, ?, ?, ?)", name, username, content, date[0]["DATETIME()"], session["user_id"])
         
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/recents")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("post.html")
 
 
-@app.route("/history")
+@app.route("/your-posts")
 @login_required
 def history():
-    return render_template("history.html")
+
+    pastTheories = db.execute("SELECT * FROM theories WHERE id = ?", session["user_id"])
+
+    return render_template("history.html", pastTheories=pastTheories)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -164,7 +172,9 @@ def register():
 @app.route("/recents", methods=["GET", "POST"])
 @login_required
 def recents ():
-    return render_template("recents.html")
+    if request.method == "GET":
+        data = db.execute("SELECT * FROM theories ORDER BY date DESC LIMIT 10")
+        return render_template("recents.html", data=data)
 
 
 @app.route("/change", methods=["GET", "POST"])
