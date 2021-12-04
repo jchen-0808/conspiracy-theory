@@ -4,8 +4,9 @@
 
     <script>
             document.addEventListener('DOMContentLoaded', function() {
-                let rights = document.querySelectorAll('.right');
-                for (let i = 0; i < rights.length; i++) {
+                let votes = document.querySelectorAll('.votes');
+                for (let i = 0; i < votes.length; i++) {
+                    if (votes[i].value = )
                     rights[i].addEventListener('click', function() {
                         rights[i].style.backgroundColor = 'Green';
                         rights[i].parentElement.querySelector('.feedback').innerHTML = 'Correct!';
