@@ -2,6 +2,37 @@
 
 <html lang="en">
 
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let rights = document.querySelectorAll('.right');
+                for (let i = 0; i < rights.length; i++) {
+                    rights[i].addEventListener('click', function() {
+                        rights[i].style.backgroundColor = 'Green';
+                        rights[i].parentElement.querySelector('.feedback').innerHTML = 'Correct!';
+                    });
+                }
+
+                let wrongs = document.querySelectorAll(".wrong");
+                for (let i = 0; i < wrongs.length; i++) {
+                    wrongs[i].addEventListener('click', function() {
+                        wrongs[i].style.backgroundColor = 'Red';
+                        wrongs[i].parentElement.querySelector('.feedback').innerHTML = 'Incorrect';
+                    });
+                }
+                
+                document.querySelector('#check').addEventListener('click', function() {
+                    let input = document.querySelector('input');
+                    if (input.value === 'eighteen' || input.value == '18' || input.value === 'Eighteen') {
+                        input.style.backgroundColor = 'green';
+                        input.parentElement.querySelector('.feedback').innerHTML = 'Correct!';
+                    } 
+                    else {
+                        input.style.backgroundColor = 'red';
+                        input.parentElement.querySelector('.feedback').innerHTML = 'Incorrect';
+                    }
+                });
+            });
+    </script>
     <head>
 
         <meta charset="utf-8">
