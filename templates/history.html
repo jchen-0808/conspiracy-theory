@@ -64,10 +64,9 @@
                     <p class="paragraph black">{{ post.content }}</p>
                     <p class="author darkgrey">posted by {{ post.user }}</p>
                     <p class="author darkgrey">{{ post.date }}</p>
+                    <p class="votes darkgrey">likes: {{ post.upvotes }} dislikes: {{ post.downvotes }}</p>
                 </div>
                 {% endfor %}
-                    </tbody>
-                </table>
             {% endblock %}
         </main>
         

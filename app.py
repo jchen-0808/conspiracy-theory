@@ -38,7 +38,9 @@ def after_request(response):
 @app.route("/")
 @login_required
 def home():
-    return render_template("home.html")
+    theories = db.execute("SELECT * FROM theories ORDER BY upvotes LIMIT 5")
+
+    return render_template("home.html", theories=theories)
 
 
 @app.route("/post", methods=["GET", "POST"])
@@ -71,7 +73,7 @@ def post():
 @login_required
 def history():
 
-    pastTheories = db.execute("SELECT * FROM theories WHERE id = ?", session["user_id"])
+    pastTheories = db.execute("SELECT * FROM theories WHERE id = ? ORDER BY date DESC", session["user_id"])
 
     return render_template("history.html", pastTheories=pastTheories)
 
@@ -175,6 +177,18 @@ def recents ():
     if request.method == "GET":
         data = db.execute("SELECT * FROM theories ORDER BY date DESC LIMIT 10")
         return render_template("recents.html", data=data)
+    
+    else:
+        if request.form["like"] == "like":
+            post = request.form.get("label")
+            likedList = db.execute("SELECT upvotes FROM theories WHERE name = ?", post)
+            likedNum = likedList[0]["upvotes"] + 1
+            db.execute("UPDATE theories SET upvotes = ?", likedNum)
+
+        elif request.form["like"] == "dislike":
+            post = request.form.get("title")
+
+        return redirect("/recents")
 
 
 @app.route("/change", methods=["GET", "POST"])

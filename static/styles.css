@@ -5,8 +5,8 @@ nav .navbar-brand
 }
 
 .container {
-    margin-left: 100px;
-    margin-right: 100px;
+    margin-left: 50px;
+    margin-right: 50px;
     padding-left: 15px;
     padding-right: 15px;
     font-family: "Comic Sans MS", "Comic Sans", cursive;
@@ -22,7 +22,7 @@ nav .navbar-brand
     text-align: right;
     font-size: medium;
     font-family: "Comic Sans MS", "Comic Sans", cursive;
-    margin-right: 100px;
+    margin-right: 150px;
 }
 
 .crimson{
@@ -57,4 +57,8 @@ nav .navbar-brand
 
 .darkgrey{
     color:#808080
+}
+
+.votes{
+    font-size: medium;
 }
