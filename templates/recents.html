@@ -59,15 +59,18 @@
         <main class="container-fluid py-5 text-center">
             {% block main %}
                 {% for post in data %}
-                <div class="container grey">
-                    <h1 class="leftAlign crimson">{{ post.name }}</p>
-                    <p class="paragraph black">{{ post.content }}</p>
-                    <p class="author darkgrey">posted by {{ post.user }}</p>
-                    <p class="author darkgrey">{{ post.date }}</p>
+                <div class="container">
+                    <form class="grey" action="/recents" id="like" method="post">
+                        <h1 name="title" id="title" class="leftAlign crimson">{{ post.name }}</p>
+                        <p class="paragraph black">{{ post.content }}</p>
+                        <p class="author darkgrey">posted by {{ post.user }}</p>
+                        <p class="author darkgrey">{{ post.date }}</p>
+                        <p class="votes darkgrey">likes: {{ post.upvotes }} dislikes: {{ post.downvotes }}</p>
+                        <button class="votes" name="like" value="like" type="submit" >Like</button>
+                        <button class="votes" name="like" value="dislike" type="submit">Dislike</button>
+                    </form>
                 </div>
                 {% endfor %}
-                    </tbody>
-                </table>
             {% endblock %}
         </main>
 
