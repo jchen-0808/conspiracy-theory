@@ -180,16 +180,14 @@ def recents ():
     
     else:
         if request.form["like"] == "like":
-            post = request.form.get("label")
-            likedList = db.execute("SELECT upvotes FROM theories WHERE name = ?", post)
-            likedNum = likedList[0]["upvotes"] + 1
-            db.execute("UPDATE theories SET upvotes = ?", likedNum)
+            updatedvalue = request.form.get("likes") + 1
+            db.execute("UPDATE theories SET upvotes = ?", updatedvalue)
 
-        elif request.form["like"] == "dislike":
-            post = request.form.get("title")
-
+        elif request.form["dislike"] == "dislike":
+            updatedvalue = request.form.get("dislikes") + 1
+            db.execute("UPDATE theories SET upvotes = ?", updatedvalue)
         return redirect("/recents")
-        
+
 
 @app.route("/change", methods=["GET", "POST"])
 @login_required
