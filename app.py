@@ -180,12 +180,12 @@ def recents ():
     
     else:
         if request.form["like"] == "like":
-            updatedvalue = request.form.get("likes") + 1
+            updatedvalue = int(request.form.get("likes")) + 1
             db.execute("UPDATE theories SET upvotes = ?", updatedvalue)
 
         elif request.form["dislike"] == "dislike":
-            updatedvalue = request.form.get("dislikes") + 1
-            db.execute("UPDATE theories SET upvotes = ?", updatedvalue)
+            updatedvalue = int(request.form.get("dislikes")) + 1
+            db.execute("UPDATE theories SET downvotes = ?", updatedvalue)
         return redirect("/recents")
 
 
