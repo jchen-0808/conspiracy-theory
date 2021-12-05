@@ -189,7 +189,7 @@ def recents ():
             post = request.form.get("title")
 
         return redirect("/recents")
-
+        
 
 @app.route("/change", methods=["GET", "POST"])
 @login_required
