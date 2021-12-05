@@ -68,6 +68,14 @@
                     <input form="userPost" name="name" id="name"></input>
                     <br>
                     <br>
+                    <div class="form-group">
+                        <select class="form-control" name="Genre">
+                            <option disabled selected value="">Genre</option>
+                                {% for genre in genres %}
+                                <option value="{{ genre }}">{{ genre }}</option>
+                                {% endfor %}
+                        </select>
+                    </div>
                     <div>
                         <h2 class="center">Description of conspiracy</h2>
                         <div>

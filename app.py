@@ -24,7 +24,21 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///conspiracy.db")
 
-
+def calcpref(user):
+    count = {politics: "0", history: "0", aliens: "0", popculture: "0", miscellaneous: "0"}
+    likes = db.execute("SELECT genre FROM likehistory WHERE user = ?", user)
+    for x in likes:
+        if(x == "politics"):
+            count[politics] = count[politics] + 1
+        elif(x == "history"):
+            count[history] = count[history] + 1
+        elif(x == "aliens"):
+            count[aliens] = count[aliens] + 1
+        elif(x == "pop-culture"):
+            count[popculture] = count[popculture] + 1
+        else:
+            count[miscellaneous] = count[miscellaneous] + 1
+    return max(stats.items(), key=operator.itemgetter(1))[0]
 
 @app.after_request
 def after_request(response):
@@ -66,7 +80,8 @@ def post():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("post.html")
+        genres = {"politics", "history", "aliens", "pop-culture", "miscellaneous"}
+        return render_template("post.html", genres=genres)
 
 
 @app.route("/your-posts")
@@ -179,13 +194,21 @@ def recents ():
         return render_template("recents.html", data=data)
     
     else:
+        name = request.form.get("name")
+        genre = request.form.get("genre")
+        id = session["user_id"]
+
         if request.form["like"] == "like":
             updatedvalue = int(request.form.get("likes")) + 1
-            db.execute("UPDATE theories SET upvotes = ?", updatedvalue)
+            newpref = calcpref(id)
+            db.execute("UPDATE theories SET upvotes = ? WHERE name = ?", updatedvalue, name)
+            db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, id, 1, genre)
+            db.execute("UPDATE users SET preference = ? WHERE id = ?", newpref, id)
 
         elif request.form["dislike"] == "dislike":
             updatedvalue = int(request.form.get("dislikes")) + 1
-            db.execute("UPDATE theories SET downvotes = ?", updatedvalue)
+            db.execute("UPDATE theories SET downvotes = ? WHERE name = ?", updatedvalue, name)
+            db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, username, 0, genre)
         return redirect("/recents")
 
 

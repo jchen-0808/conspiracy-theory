@@ -15,13 +15,6 @@
         <link href="/static/styles.css" rel="stylesheet">
 
         <title>Conspiracy Theories {% block title %}{% endblock %}</title>
-        <script>
-          for (const btn of document.querySelectorAll('.vote')) {
-            btn.addEventListener('click', event => {
-              event.currentTarget.classList.toggle('on');
-            });
-          }
-        </script>
 
     </head>
 
@@ -76,12 +69,13 @@
                         <p class="votes darkgrey">likes: {{ post.upvotes }} dislikes: {{ post.downvotes }}</p>
                         <input type = "hidden" name = "likes" value = "{{ post.upvotes }}"/>
                         <input type = "hidden" name = "dislikes" value = "{{ post.downvotes }}"/>
-                        <button class="dislike" name="dislike" value="dislike" type="submit">Like</button>
-                        <button class="like" name="like" value="like" type="submit">Dislike</button>
-                        </span>
+                        <input type = "hidden" name = "name" value = "{{ post.name }}"/>
+                        <input type = "hidden" name = "name" value = "{{ post.genre }}"/>
+                        <button class="dislike" name="dislike" value="dislike" type="submit">Dislike</button>
+                        <button class="like" name="like" value="like" type="submit">Like</button>
+                    </form>
                 </div>
   
-                  </form>
                 {% endfor %}
             {% endblock %}
         </main>
