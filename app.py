@@ -87,10 +87,30 @@ def post():
 @app.route("/your-posts")
 @login_required
 def history():
+    quizResults = db.execute("SELECT * FROM quiz WHERE username = ?", session["user_id"])
+
+    try:
+        results = "Based on our analysis from the quiz... you are a "
+        if quizResults[0]["wellround"] == 1:
+            temp = "Well-Rounder"
+
+            if quizResults[0]["skeptic"] == 1:
+                temp = "Skeptic"
+
+            if quizResults[0]["believer"] == 1:
+                temp = "True Believer"
+            
+            results += temp
+
+        else:
+            results += quizResults[0]["result"]
+        
+    except:
+        results = "Take the quiz to find out what kind of conspiracy theorist you are!"
 
     pastTheories = db.execute("SELECT * FROM theories WHERE id = ? ORDER BY date DESC", session["user_id"])
 
-    return render_template("history.html", pastTheories=pastTheories)
+    return render_template("history.html", results=results, quizResults=quizResults, pastTheories=pastTheories)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -149,7 +169,9 @@ def quiz():
     else:
         return render_template("quiz.html")
 
+
 @app.route("/questions", methods=["GET", "POST"])
+@login_required
 def questions():
     if request.method == "POST":
         q1 = int(request.form.get("q1"))
@@ -168,24 +190,79 @@ def questions():
         history = q4 + q8
         misc = q5 + q3
         popCult = q10 + q7
-        
-        db.execute("INSERT INTO quiz (username, alien, politics, history, misc, popcult) VALUES (?, ?, ?, ?, ?, ?)", session["user_id"], aliens, politics, history, misc, popCult)
 
+        possibilityDict = {"Alien Believer": aliens,"Political Conspirator": politics, "Woke Historian": history, "One Who Can't Decide": misc,"Pop Culture Theorist": popCult}
+        resultsList = []
+        for key, value in possibilityDict.items():
+            if value == max(possibilityDict.values()):
+                resultsList.append(key)
+        
+        resultString = ""
+
+        if len(resultsList) > 1:
+            for result in resultsList:
+                if resultString == "":
+                    resultString += result
+
+                else:
+                    resultString += (" and " + result)
+        
+        else:
+            resultString = resultsList[0]
+            
         minScore = 10
         maxScore = 50
-
         userMin = aliens + politics + history + misc + popCult
+
+        alienPercent = int(aliens/userMin * 100)
+        politicsPercent = int(politics/userMin * 100)
+        historyPercent = int(history/userMin * 100)
+        miscPercent = int(misc/userMin * 100)
+        popCultPercent = int(popCult/userMin * 100)
+
+        try:
+            db.execute("INSERT INTO quiz (username, alien, politics, history, misc, popcult, result) VALUES (?, ?, ?, ?, ?, ?, ?)", session["user_id"], alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString)
+
+        except:
+            db.execute("UPDATE quiz SET alien = ?, politics = ?, history = ?, misc = ?, popcult = ?, result = ? WHERE username = ?", alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString, session["user_id"])
 
         if userMin == minScore:
             db.execute("UPDATE quiz SET skeptic = ? WHERE username = ?", 1, session["user_id"])
         elif userMin == maxScore:
-            db.execute("UPDATE quiz SET misc = ? WHERE username = ?", 100, session["user_id"])
+            db.execute("UPDATE quiz SET believer = ? WHERE username = ?", 1, session["user_id"])
+        elif alienPercent == politicsPercent and alienPercent == historyPercent and alienPercent == miscPercent and alienPercent == popCultPercent:
+            db.execute("UPDATE quiz SET wellround = ? WHERE username = ?", 1, session["user_id"])
+        else:
+            db.execute("UPDATE quiz SET skeptic = ?, believer = ?, wellround = ? WHERE username = ?", 0, 0, 0, session["user_id"])
 
-        return render_template("results.html")
+        return redirect("/results")
         
     else:
         return render_template("questions.html")
 
+
+@app.route("/results", methods=["GET", "POST"])
+@login_required
+def results():
+    if request.method == "POST":
+        return redirect("/questions")
+    
+    else:
+        quizResults = db.execute("SELECT * FROM quiz WHERE username = ?", session["user_id"])
+
+        if quizResults[0]["wellround"] == 1:
+            results = "Well-Rounder"
+
+            if quizResults[0]["skeptic"] == 1:
+                results = "Skeptic"
+
+            if quizResults[0]["believer"] == 1:
+                results = "True Believer"
+
+        else:
+            results = quizResults[0]["result"]
+
+        return render_template("results.html", results=results, quizResults=quizResults)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

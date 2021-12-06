@@ -58,6 +58,10 @@
 
         <main class="container-fluid py-5 text-center">
             {% block main %}
+                <div class="container crimson large">
+                    <p>{{ results }}</p>
+                    <p>See your posts here</p>
+                </div>
                 {% for post in pastTheories %}
                 <div class="container grey">
                     <h1 class="leftAlign crimson">{{ post.name }}</p>

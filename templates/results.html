@@ -33,7 +33,7 @@
                             <li class="nav-item"><a class="nav-link" href="/recents">Recents</a></li>
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
                             <li class="nav-item"><a class="nav-link" href="/quiz">Quiz</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/your-posts">Your posts</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -57,7 +57,29 @@
         {% endif %}
 
         <main class="container-fluid py-5 text-center">
-            {% block main %}{% endblock %}
+            {% block main %}
+                <div class="container">
+                    <p>Based on our analysis...</p>
+                    <p class="crimson large">you are a {{ results }}</p>
+                </div>
+                <br>
+                <div class="container">
+                    <p>Your percentage breakdowns are: </p>
+                    {% for percentage in quizResults %}
+                        <p>The Alien Believer: {{ percentage.alien }}%</p>
+                        <p>The Political Conspirator: {{ percentage.politics }}%</p>
+                        <p>The Woke Historian: {{ percentage.history }}%</p>
+                        <p>The Pop Culture Theorist: {{ percentage.popcult }}%</p>
+                        <p>The One That Can't Decide: {{ percentage.misc }}%</p>
+                    {% endfor %}
+                </div>
+                <br>
+                <div class="container">
+                    <form action="/results" id="return" method="post">
+                        <button name="takeAgain" value="takeAgain" type="submit">Take again</button>
+                    </form>
+                </div>
+            {% endblock %}
         </main>
 
         <footer class="mb-5 small text-center text-muted">
