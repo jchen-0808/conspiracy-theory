@@ -57,7 +57,21 @@
         {% endif %}
 
         <main class="container-fluid py-5 text-center">
-            {% block main %}{% endblock %}
+            {% block main %}
+            <form action="/quiz" method="post">
+                <div class="votes">
+                    <p class="crimson">Take the quiz to find out what kind of conspiracy theorist you are!</p> 
+                    <p class="crimson">possible results:</p>
+                    <p>the political conspirator</p>
+                    <p>the alien believer</p>
+                    <p>the pop culture theorist</p>
+                    <p>the woke historian</p>
+                    <p>the one that can't decide</p>
+                    <p>the skeptic</p>
+                </div>
+                <button class="btn btn-primary" type="submit">start</button>
+            </form>
+            {% endblock %}
         </main>
 
         <footer class="mb-5 small text-center text-muted">

@@ -143,7 +143,48 @@ def logout():
 @app.route("/quiz", methods=["GET", "POST"])
 @login_required
 def quiz():
-    return render_template("quiz.html")
+    if request.method == "POST":
+        return redirect("/questions")
+    
+    else:
+        return render_template("quiz.html")
+
+@app.route("/questions", methods=["GET", "POST"])
+def questions():
+    if request.method == "POST":
+        q1 = int(request.form.get("q1"))
+        q2 = int(request.form.get("q2"))
+        q3 = int(request.form.get("q3"))
+        q4 = int(request.form.get("q4"))
+        q5 = int(request.form.get("q5"))
+        q6 = int(request.form.get("q6"))
+        q7 = int(request.form.get("q7"))
+        q8 = int(request.form.get("q8"))
+        q9 = int(request.form.get("q9"))
+        q10 = int(request.form.get("q10"))
+
+        aliens = q1 + q6
+        politics = q2 + q9
+        history = q4 + q8
+        misc = q5 + q3
+        popCult = q10 + q7
+        
+        db.execute("INSERT INTO quiz (username, alien, politics, history, misc, popcult) VALUES (?, ?, ?, ?, ?, ?)", session["user_id"], aliens, politics, history, misc, popCult)
+
+        minScore = 10
+        maxScore = 50
+
+        userMin = aliens + politics + history + misc + popCult
+
+        if userMin == minScore:
+            db.execute("UPDATE quiz SET skeptic = ? WHERE username = ?", 1, session["user_id"])
+        elif userMin == maxScore:
+            db.execute("UPDATE quiz SET misc = ? WHERE username = ?", 100, session["user_id"])
+
+        return render_template("results.html")
+        
+    else:
+        return render_template("questions.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
