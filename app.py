@@ -140,10 +140,14 @@ def about():
 @app.route("/your-posts")
 @login_required
 def history():
+
+    # gets quiz results
     quizResults = db.execute("SELECT * FROM quiz WHERE username = ?", session["user_id"])
 
+    # trys to display quiz results, if fails, it means that the user has not completed the quiz yet
     try:
         results = "Based on our analysis from the quiz... you are a "
+        # tests if user is well-rounder, skeptic or believer because those are special cases
         if quizResults[0]["wellround"] == 1:
             temp = "Well-Rounder"
 
@@ -155,12 +159,15 @@ def history():
             
             results += temp
 
+        # otherwise, prints result genre
         else:
             results += quizResults[0]["result"]
-        
+    
+    # if user hasn't taken the quiz, encourages them to do so
     except:
         results = "Take the quiz to find out what kind of conspiracy theorist you are!"
 
+    # shows users most popular posts
     pastTheories = db.execute("SELECT * FROM theories WHERE id = ? ORDER BY upvotes DESC", session["user_id"])
 
     return render_template("history.html", results=results, quizResults=quizResults, pastTheories=pastTheories)
@@ -216,6 +223,7 @@ def logout():
 @app.route("/quiz", methods=["GET", "POST"])
 @login_required
 def quiz():
+    # button pushed, redirects to questions
     if request.method == "POST":
         return redirect("/questions")
     
@@ -227,6 +235,7 @@ def quiz():
 @login_required
 def questions():
     if request.method == "POST":
+        # gets all the quiz answers
         q1 = int(request.form.get("q1"))
         q2 = int(request.form.get("q2"))
         q3 = int(request.form.get("q3"))
@@ -238,42 +247,52 @@ def questions():
         q9 = int(request.form.get("q9"))
         q10 = int(request.form.get("q10"))
 
+        # adds together question ratings by category/genre of question
         aliens = q1 + q6
         politics = q2 + q9
         history = q4 + q8
         misc = q5 + q3
         popCult = q10 + q7
 
+        # creates a dictionary with each category with the actual names of the results
         possibilityDict = {"Alien Believer": aliens, "Political Conspirator": politics, 
                            "Woke Historian": history, "One Who Can't Decide": misc, "Pop Culture Theorist": popCult}
+        
+        # new list in case multiple categories are winners
         resultsList = []
+
+        # finds max values of dictionary items to find the results of the quiz
         for key, value in possibilityDict.items():
             if value == max(possibilityDict.values()):
                 resultsList.append(key)
         
         resultString = ""
 
+        # in the case that multiple genres win, adds them together to complete the result string
         if len(resultsList) > 1:
             for result in resultsList:
+                # checks if there needs to be an and or not
                 if resultString == "":
                     resultString += result
-
                 else:
                     resultString += (" and " + result)
         
         else:
             resultString = resultsList[0]
             
+        # variables for calculations
         minScore = 10
         maxScore = 50
         userMin = aliens + politics + history + misc + popCult
 
+        # calculates the distributions of the results by genre
         alienPercent = int(aliens/userMin * 100)
         politicsPercent = int(politics/userMin * 100)
         historyPercent = int(history/userMin * 100)
         miscPercent = int(misc/userMin * 100)
         popCultPercent = int(popCult/userMin * 100)
 
+        # adds results into the database, if user already completed the quiz, the insert fails and turns into an update instead
         try:
             db.execute("INSERT INTO quiz (username, alien, politics, history, misc, popcult, result) VALUES (?, ?, ?, ?, ?, ?, ?)",
                        session["user_id"], alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString)
@@ -282,12 +301,19 @@ def questions():
             db.execute("UPDATE quiz SET alien = ?, politics = ?, history = ?, misc = ?, popcult = ?, result = ? WHERE username = ?",
                        alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString, session["user_id"])
 
+        # checks for special score cases: if user answers 1 in everything, they are skeptic
         if userMin == minScore:
             db.execute("UPDATE quiz SET skeptic = ? WHERE username = ?", 1, session["user_id"])
+
+        # if user answers 5 on everything they are a true believer
         elif userMin == maxScore:
             db.execute("UPDATE quiz SET believer = ? WHERE username = ?", 1, session["user_id"])
+        
+        # if user answsers the same on all questions but values aren't 1 or 5 they are well-rounded
         elif alienPercent == politicsPercent and alienPercent == historyPercent and alienPercent == miscPercent and alienPercent == popCultPercent:
             db.execute("UPDATE quiz SET wellround = ? WHERE username = ?", 1, session["user_id"])
+
+        # updates values in database in case it's not the user's first time completing the quiz
         else:
             db.execute("UPDATE quiz SET skeptic = ?, believer = ?, wellround = ? WHERE username = ?", 0, 0, 0, session["user_id"])
 
@@ -301,10 +327,15 @@ def questions():
 @login_required
 def results():
     if request.method == "POST":
+        # redirects to questions if user wants to take the quiz again
         return redirect("/questions")
+
+
     else:
+        # finds results of the quiz
         quizResults = db.execute("SELECT * FROM quiz WHERE username = ?", session["user_id"])
 
+        # checks for special cases: when user has the same in all categories and changes output
         if quizResults[0]["wellround"] == 1:
             results = "Well-Rounder"
 
@@ -317,6 +348,7 @@ def results():
         else:
             results = quizResults[0]["result"]
 
+        # returns result and quizResults list to show the distribution
         return render_template("results.html", results=results, quizResults=quizResults)
 
 
@@ -363,6 +395,7 @@ def register():
 @app.route("/recents", methods=["GET", "POST"])
 @login_required
 def recents():
+    # Finds 10 most recent theories
     data = db.execute("SELECT * FROM theories ORDER BY date DESC LIMIT 10")
     if request.method == "GET":
         return render_template("recents.html", data=data)
