@@ -17,6 +17,28 @@
         <title>Conspiracy Theories {% block title %}{% endblock %}</title>
 
     </head>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+
+        el_autohide = document.querySelector('.autohide');
+
+        if(el_autohide){
+            var last_scroll_top = 0;
+            window.addEventListener('scroll', function() {
+                let scroll_top = window.scrollY;
+                if(scroll_top < last_scroll_top) {
+                    el_autohide.classList.remove('scrolled-down');
+                    el_autohide.classList.add('scrolled-up');
+                }
+                else {
+                    el_autohide.classList.remove('scrolled-up');
+                    el_autohide.classList.add('scrolled-down');
+                }
+            last_scroll_top = scroll_top;
+            }); 
+        }
+    }); 
+    </script>
     <style>
         body {
             animation: fadeInAnimation ease 2s;
@@ -33,16 +55,19 @@
         }
     </style>
     <body>
-
-        <nav class="bg-light border navbar navbar-expand-md navbar-light">
+        <nav class="autohide navbar navbar-expand-lg bg-light border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">Conspiracy Theories</a>
                 <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
-                        <ul class="navbar-nav me-auto mt-2">
+                        <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="/recents">Recents</a></li>
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
@@ -50,12 +75,12 @@
                             <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
                             <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                         </ul>
-                        <ul class="navbar-nav ms-auto mt-2">
+                        <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/change">Change Password</a></li>
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
                     {% else %}
-                        <ul class="navbar-nav ms-auto mt-2">
+                        <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
                             <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                         </ul>

@@ -83,17 +83,9 @@ nav .navbar-brand
     color: #f48024
 }
 
-body {
-    animation: fadeInAnimation ease 3s
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+.scrolled-down{
+  transform:translateY(-100%); transition: all 0.3s ease-in-out;
 }
-  
-@keyframes fadeInAnimation {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-     }
+.scrolled-up{
+  transform:translateY(0); transition: all 0.3s ease-in-out;
 }
