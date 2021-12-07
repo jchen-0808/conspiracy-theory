@@ -27,10 +27,12 @@ Session(app)
 db = SQL("sqlite:///conspiracy.db")
 
 
+# Given the user calculate their genre preference 
 def calcpref(user):
     count = {"Politics": 0, "history": 0, "aliens": 0, "pop-culture": 0, "miscellaneous": 0}
     likes = db.execute("SELECT genre FROM likehistory WHERE user = ? and like = 1", user)
 
+# count likes in each genre
     for x in likes:
         if(x["genre"] == "Politics"):
             count["Politics"] = count["Politics"] + 1
@@ -43,6 +45,7 @@ def calcpref(user):
         elif(x["genre"] == "miscellaneous"):
             count["miscellaneous"] = count["miscellaneous"] + 1
 
+# subtract dislikes from like count
     dislikes = db.execute("SELECT genre FROM likehistory WHERE user = ? and like = 0", user)
     for x in dislikes:
         if(x["genre"] == "Politics"):
@@ -56,18 +59,20 @@ def calcpref(user):
         elif(x["genre"] == "miscellaneous"):
             count["miscellaneous"] = count["miscellaneous"] - 1
 
+# Return genre with greatest like score
     return max(count, key=count.get)
 
 
+# Check if post contains any of Youtube's blacklisted words
 def langcheck(content):
     f = open('blacklist.csv', 'rt')
     reader = csv.reader(f, delimiter=',')
 
+# iterate through post, check to see if it contains any blacklisted words
     for row in reader:
         for field in row:
             if (" " + field.strip() + " ") in (" " + content + " "):
                 return False
-
     f.close()
     return True
 
@@ -84,6 +89,7 @@ def after_request(response):
 @app.route("/")
 @login_required
 def home():
+    # Show feed of conspiracy theory posts based on user preference, mixing in random posts as well
     pref = db.execute("SELECT preference FROM users WHERE id = ?", session["user_id"])
     theories = db.execute("SELECT * FROM theories WHERE genre = ? ORDER BY upvotes DESC LIMIT 5", pref[0]["preference"])
     otherTheories = db.execute("SELECT * FROM theories WHERE genre != ? ORDER BY upvotes DESC LIMIT 5", pref[0]["preference"])
@@ -106,6 +112,7 @@ def post():
         if (len(titles) > 0):
             return apology("Title already exists, please choose another title")
 
+        # Check for inappropriate language, if none detected, add post to database; if inappropriate language detected, return apology
         if langcheck(name) and langcheck(content):
             user = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
             username = user[0]["username"]
