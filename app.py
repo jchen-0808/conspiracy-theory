@@ -1,4 +1,6 @@
 import os
+import random
+import csv
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -52,6 +54,16 @@ def calcpref(user):
             count["miscellaneous"] = count["miscellaneous"] - 1
     return max(count, key=count.get)
 
+def langcheck(content):
+    f = open('blacklist.csv', 'rt')
+    reader = csv.reader(f, delimiter=',')
+    for row in reader:
+        for field in row:
+            if field in content:
+                return False
+    f.close()
+    return True
+
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -64,8 +76,10 @@ def after_request(response):
 @app.route("/")
 @login_required
 def home():
-    theories = db.execute("SELECT * FROM theories ORDER BY upvotes LIMIT 5")
-
+    pref = db.execute("SELECT preference FROM users WHERE id = ?", session["user_id"])
+    theories = db.execute("SELECT * FROM theories WHERE genre = ? ORDER BY upvotes LIMIT 6", pref[0]["preference"])
+    theories.append(db.execute("SELECT * FROM theories LIMIT 4"))
+    random.shuffle(theories)
     return render_template("home.html", theories=theories)
 
 
@@ -77,29 +91,31 @@ def post():
         genre = request.form.get("Genre")
         content = request.form.get("post")
 
-        # ensures all fields are filled
-        if name == "" or content == "" or genre == "":
-            return apology("Please complete all fields")
-
         #checks for no repeat title
-        titles = db.execute("SELECT name FROM theories")
-        if (name in titles):
+        titles = db.execute("SELECT name FROM theories WHERE name = ?", name)
+        if (len(titles) > 0):
             return apology("Title already exists, please choose another title")
-        
-        user = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
-        username = user[0]["username"]
 
-        date = db.execute("SELECT DATETIME()")
+        if langcheck(name) and langcheck(content):
+            user = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
+            username = user[0]["username"]
 
-        db.execute("INSERT INTO theories (name, user, content, date, id, genre) VALUES (?, ?, ?, ?, ?, ?)", name, username, content, date[0]["DATETIME()"], session["user_id"], genre)
+            date = db.execute("SELECT DATETIME()")
         
-        # Redirect user to home page
+            db.execute("INSERT INTO theories (name, user, content, date, id, genre) VALUES (?, ?, ?, ?, ?, ?)", name, username, content, date[0]["DATETIME()"], session["user_id"], genre)
+        else:
+            return apology("Please refrain from using inappropriate language")
+        
+        # Refresh page
         return redirect("/recents")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("post.html")
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 @app.route("/your-posts")
 @login_required

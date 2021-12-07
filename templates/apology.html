@@ -5,6 +5,21 @@
 {% endblock %}
 
 {% block main %}
+<style>
+    body {
+        animation: fadeInAnimation ease 2s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+    @keyframes fadeInAnimation {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    </style>
     <!-- https://memegen.link/ -->
-    <img alt="{{ top }}" class="border img-fluid" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.imgur.com/CsCgN7Ll.png&width=400" title="{{ top }}">
+    <img alt="{{ top }}" class="border img-fluid" width=400&height=400 src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.pinimg.com/474x/6c/05/23/6c0523eaab587144a2c57a97ff5aeb5e.jpg" title="{{ top }}">
 {% endblock %}

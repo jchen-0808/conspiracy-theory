@@ -71,35 +71,25 @@
             </header>
         {% endif %}
 
-
         <main class="container-fluid py-5 text-center">
             {% block main %}
-                {% for post in data %}
-                <div class="container">
-                    <form class="grey" action="/recents" id="like" method="post">
-                        <h1 name="title" id="title" class="leftAlign crimson">{{ post.name }}</p>
-                        <p id="genre" class="black medium">{{ post.genre }}</p>
-                        <p class="paragraph black">{{ post.content }}</p>
-                        <p class="author darkgrey">posted by {{ post.user }}</p>
-                        <p class="author darkgrey">{{ post.date }}</p>
-                        <p class="votes darkgrey">likes: {{ post.upvotes }} dislikes: {{ post.downvotes }}</p>
-                        <input type = "hidden" name = "likes" value = "{{ post.upvotes }}"/>
-                        <input type = "hidden" name = "dislikes" value = "{{ post.downvotes }}"/>
-                        <input type = "hidden" name = "name" value = "{{ post.name }}"/>
-                        <input type = "hidden" name = "genre" value = "{{ post.genre }}"/>
-                        <button class="btn btn-primary" type="submit" name="like" value="like">Like</button>
-                        <button class="btn btn-primary" type="submit" name="dislike" value="dislike">Dislike</button>
-                    </form>
-                </div>
-  
-                {% endfor %}
+            <div>
+                <h2 class="grey container crimson">A conspiracy theory is an explanation for an event or situation that invokes a conspiracy by sinister and powerful groups, often political in motivation, when other explanations are more probable.</h2>
+            </div>
+            <div class="container leftAlign">
+                <h3>Popular conspiracy theories:</h3>
+                <br>
+                <a class="large" href="https://birdsarentreal.com/">Birds aren't real</a>
+                <br>
+                <a class="large" href="https://www.vox.com/2016/3/8/11179492/ted-cruz-zodiac-killer">Ted Cruz is the zodiac killer</a>
+                <br>
+                <a class="large" href="https://en.wikipedia.org/wiki/Flat_Earth">Earth is flat</a>
+            </div>
             {% endblock %}
+            
+            <footer class="mb-5 small text-center text-muted">
+                All posts on this website are not scientific facts. Please do not take anything too seriously
+            </footer>
         </main>
-
-        <footer class="mb-5 small text-center text-muted">
-            All posts on this website are not scientific facts. Please do not take anything too seriously
-        </footer>
-
     </body>
-
 </html>

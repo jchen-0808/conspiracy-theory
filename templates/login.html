@@ -5,6 +5,21 @@
 {% endblock %}
 
 {% block main %}
+    <style>
+        body {
+            animation: fadeInAnimation ease 2s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+        @keyframes fadeInAnimation {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
     <form action="/login" method="post">
         <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">

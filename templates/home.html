@@ -17,7 +17,21 @@
         <title>Conspiracy Theories {% block title %}{% endblock %}</title>
 
     </head>
-
+    <style>
+        body {
+            animation: fadeInAnimation ease 2s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+        @keyframes fadeInAnimation {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
     <body>
 
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
@@ -34,6 +48,7 @@
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
                             <li class="nav-item"><a class="nav-link" href="/quiz">Quiz</a></li>
                             <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -58,27 +73,25 @@
 
         <main class="container-fluid py-5 text-center">
             {% block main %}
-            <div>
-                <h2 class="grey container crimson">A conspiracy theory is an explanation for an event or situation that invokes a conspiracy by sinister and powerful groups, often political in motivation, when other explanations are more probable.</h2>
-            </div>
-            <div class="container leftAlign">
-                <h3>Popular conspiracy theories:</h3>
-                <br>
-                <a class="large" href="https://birdsarentreal.com/">Birds aren't real</a>
-                <br>
-                <a class="large" href="https://www.vox.com/2016/3/8/11179492/ted-cruz-zodiac-killer">Ted Cruz is the zodiac killer</a>
-                <br>
-                <a class="large" href="https://en.wikipedia.org/wiki/Flat_Earth">Earth is flat</a>
-            </div>
             <div class="container">
-                <h3>Featured posts</h3>
+                <h3>Feed</h3>
             </div>
                 {% for post in theories %}
-                <div class="container grey">
-                    <h1 class="leftAlign crimson">{{ post.name }}</p>
-                    <p class="paragraph black">{{ post.content }}</p>
-                    <p class="author darkgrey">posted by {{ post.user }}</p>
-                    <p class="author darkgrey">{{ post.date }}</p>
+                <div class="container">
+                    <form class="grey" action="/recents" id="like" method="post">
+                        <h1 name="title" id="title" class="leftAlign crimson">{{ post.name }}</p>
+                        <p id="genre" class="black medium">{{ post.genre }}</p>
+                        <p class="paragraph black">{{ post.content }}</p>
+                        <p class="author darkgrey">posted by {{ post.user }}</p>
+                        <p class="author darkgrey">{{ post.date }}</p>
+                        <p class="votes darkgrey">likes: {{ post.upvotes }} dislikes: {{ post.downvotes }}</p>
+                        <input type = "hidden" name = "likes" value = "{{ post.upvotes }}"/>
+                        <input type = "hidden" name = "dislikes" value = "{{ post.downvotes }}"/>
+                        <input type = "hidden" name = "name" value = "{{ post.name }}"/>
+                        <input type = "hidden" name = "genre" value = "{{ post.genre }}"/>
+                        <button class="btn btn-primary" type="submit" name="like" value="like">Like</button>
+                        <button class="btn btn-primary" type="submit" name="dislike" value="dislike">Dislike</button>
+                    </form>
                 </div>
                 {% endfor %}
             {% endblock %}

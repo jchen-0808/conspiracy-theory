@@ -17,7 +17,21 @@
         <title>Conspiracy Theories {% block title %}{% endblock %}</title>
 
     </head>
-
+    <style>
+        body {
+            animation: fadeInAnimation ease 2s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+        @keyframes fadeInAnimation {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
     <body>
 
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
@@ -34,6 +48,7 @@
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
                             <li class="nav-item"><a class="nav-link" href="/quiz">Quiz</a></li>
                             <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -70,12 +85,11 @@
                     <br>
                     <div class="form-group">
                         <select form="userPost" name="Genre">
-                            <option disabled selected value hidden="">Genre</option>
-                            <option value="politics">politics</option>
-                            <option value="history">history</option>
-                            <option value="aliens">aliens</option>
-                            <option value="pop-culture">pop-culture</option>
-                            <option value="miscellaneous">miscellaneous</option>
+                            <option value="miscellaneous">Miscellaneous</option>
+                            <option value="politics">Politics</option>
+                            <option value="history">History</option>
+                            <option value="aliens">Aliens</option>
+                            <option value="pop-culture">Pop-culture</option>
                         </select>
                     </div>
                     <br>
