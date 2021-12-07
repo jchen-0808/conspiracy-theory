@@ -332,21 +332,21 @@ def recents ():
         genre = request.form.get("genre")
         id = session["user_id"]
 
-        if request.form["like"] == "like":
+        if request.form.get("like"):
             updatedvalue = int(request.form.get("likes")) + 1
             newpref = calcpref(id)
             db.execute("UPDATE theories SET upvotes = ? WHERE name = ?", updatedvalue, name)
             db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, id, 1, genre)
             db.execute("UPDATE users SET preference = ? WHERE id = ?", newpref, id)
 
-        elif request.form["dislike"] == "dislike":
+        elif request.form.get("dislike"):
             updatedvalue = int(request.form.get("dislikes")) + 1
             newpref = calcpref(id)
             db.execute("UPDATE theories SET downvotes = ? WHERE name = ?", updatedvalue, name)
             db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, id, 0, genre)
             db.execute("UPDATE users SET preference = ? WHERE id = ?", newpref, id)
-        
-        return render_template("recents.html", data=data)
+
+        return redirect("/recents")
 
 
 @app.route("/change", methods=["GET", "POST"])
