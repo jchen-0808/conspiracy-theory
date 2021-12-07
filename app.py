@@ -27,40 +27,46 @@ Session(app)
 db = SQL("sqlite:///conspiracy.db")
 
 def calcpref(user):
-    count = {"politics": 0, "history": 0, "aliens": 0, "popculture": 0, "miscellaneous": 0}
+    count = {"Politics": 0, "history": 0, "aliens": 0, "pop-culture": 0, "miscellaneous": 0}
     likes = db.execute("SELECT genre FROM likehistory WHERE user = ? and like = 1", user)
+
     for x in likes:
-        if(x == "politics"):
-            count["politics"] = count["politics"] + 1
-        elif(x == "history"):
+        if(x["genre"] == "Politics"):
+            count["Politics"] = count["Politics"] + 1
+        elif(x["genre"] == "history"):
             count["history"] = count["history"] + 1
-        elif(x == "aliens"):
+        elif(x["genre"] == "aliens"):
             count["aliens"] = count["aliens"] + 1
-        elif(x == "pop-culture"):
-            count["popculture"] = count["popculture"] + 1
-        else:
+        elif(x["genre"] == "pop-culture"):
+            count["pop-culture"] = count["pop-culture"] + 1
+        elif(x["genre"] == "miscellaneous"):
             count["miscellaneous"] = count["miscellaneous"] + 1
+
     dislikes = db.execute("SELECT genre FROM likehistory WHERE user = ? and like = 0", user)
     for x in dislikes:
-        if(x == "politics"):
-            count["politics"] = count["politics"] - 1
-        elif(x == "history"):
+        if(x["genre"] == "Politics"):
+            count["Politics"] = count["Politics"] - 1
+        elif(x["genre"] == "history"):
             count["history"] = count["history"] - 1
-        elif(x == "aliens"):
+        elif(x["genre"] == "aliens"):
             count["aliens"] = count["aliens"] - 1
-        elif(x == "pop-culture"):
-            count["popculture"] = count["popculture"] - 1
-        else:
+        elif(x["genre"] == "pop-culture"):
+            count["pop-culture"] = count["pop-culture"] - 1
+        elif(x["genre"] == "miscellaneous"):
             count["miscellaneous"] = count["miscellaneous"] - 1
+
+    print(max(count, key=count.get))
     return max(count, key=count.get)
 
 def langcheck(content):
     f = open('blacklist.csv', 'rt')
     reader = csv.reader(f, delimiter=',')
+
     for row in reader:
         for field in row:
-            if field in content:
+            if (" " + field.strip() + " ") in (" " + content + " "):
                 return False
+
     f.close()
     return True
 
@@ -77,8 +83,10 @@ def after_request(response):
 @login_required
 def home():
     pref = db.execute("SELECT preference FROM users WHERE id = ?", session["user_id"])
-    theories = db.execute("SELECT * FROM theories WHERE genre = ? ORDER BY upvotes LIMIT 6", pref[0]["preference"])
-    theories.append(db.execute("SELECT * FROM theories LIMIT 4"))
+    theories = db.execute("SELECT * FROM theories WHERE genre = ? ORDER BY upvotes DESC LIMIT 5", pref[0]["preference"])
+    otherTheories = db.execute("SELECT * FROM theories WHERE genre != ? ORDER BY upvotes DESC LIMIT 5", pref[0]["preference"])
+    theories = theories + otherTheories
+    
     random.shuffle(theories)
     return render_template("home.html", theories=theories)
 
@@ -141,7 +149,7 @@ def history():
     except:
         results = "Take the quiz to find out what kind of conspiracy theorist you are!"
 
-    pastTheories = db.execute("SELECT * FROM theories WHERE id = ? ORDER BY date DESC", session["user_id"])
+    pastTheories = db.execute("SELECT * FROM theories WHERE id = ? ORDER BY upvotes DESC", session["user_id"])
 
     return render_template("history.html", results=results, quizResults=quizResults, pastTheories=pastTheories)
 

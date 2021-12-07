@@ -17,21 +17,7 @@
         <title>Conspiracy Theories {% block title %}{% endblock %}</title>
 
     </head>
-    <style>
-        body {
-            animation: fadeInAnimation ease 2s;
-            animation-iteration-count: 1;
-            animation-fill-mode: forwards;
-        }
-        @keyframes fadeInAnimation {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-    </style>
+
     <body>
 
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
@@ -74,35 +60,23 @@
 
         <main class="container-fluid py-5 text-center">
             {% block main %}
-            <div class="container">
-                <h3>Feed</h3>
-            </div>
-                {% for post in theories %}
-                <div class="container">
-                    <form class="grey" action="/recents" id="like" method="post">
-                        <h1 name="title" id="title" class="leftAlign crimson">{{ post.name }}</p>
-                        <p id="genre" class="black medium">{{ post.genre }}</p>
-                        <p class="paragraph black">{{ post.content }}</p>
-                        <p class="author darkgrey">posted by {{ post.user }}</p>
-                        <p class="author darkgrey">{{ post.date }}</p>
-                        <p class="votes darkgrey">likes: {{ post.upvotes }} dislikes: {{ post.downvotes }}</p>
-                        <input type = "hidden" name = "likes" value = "{{ post.upvotes }}"/>
-                        <input type = "hidden" name = "dislikes" value = "{{ post.downvotes }}"/>
-                        <input type = "hidden" name = "name" value = "{{ post.name }}"/>
-                        <input type = "hidden" name = "genre" value = "{{ post.genre }}"/>
-                        <button class="btn btn-primary" type="submit" name="like" value="like">Like</button>
-                        <button class="btn btn-primary" type="submit" name="dislike" value="dislike">Dislike</button>
-                    </form>
+            <form action="/change" method="post">
+                <div class="mb-3">
+                    <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="new password" name="new password" placeholder="New Password" type="password">
                 </div>
-                {% endfor %}
+                <div class="mb-3">
+                    <input class="form-control mx-auto w-auto" id="confirm" name="confirm" placeholder="Confirm Password" type="password">
+                </div>
+                <button class="btn btn-primary" type="submit">Change</button>
+            </form>
             {% endblock %}
-
-            <footer class="mb-5 small text-center text-muted">
-                All posts on this website are not scientific facts. Please do not take anything too seriously
-            </footer>
-
         </main>
 
+        <footer class="mb-5 small text-center text-muted">
+            All posts on this website are not scientific facts. Please do not take anything too seriously
+        </footer>
+
     </body>
+
 
 </html>
