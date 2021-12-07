@@ -371,6 +371,7 @@ def recents():
         genre = request.form.get("genre")
         id = session["user_id"]
 
+        # If like button is pressed, update preferences/like count for the post
         if request.form.get("like"):
             updatedvalue = int(request.form.get("likes")) + 1
             newpref = calcpref(id)
@@ -378,6 +379,7 @@ def recents():
             db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, id, 1, genre)
             db.execute("UPDATE users SET preference = ? WHERE id = ?", newpref, id)
 
+        # If dislike button is pressed, update preferences/dislike count for the post
         elif request.form.get("dislike"):
             updatedvalue = int(request.form.get("dislikes")) + 1
             newpref = calcpref(id)
@@ -385,6 +387,7 @@ def recents():
             db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, id, 0, genre)
             db.execute("UPDATE users SET preference = ? WHERE id = ?", newpref, id)
 
+        # Refresh page
         return redirect("/recents")
 
 
