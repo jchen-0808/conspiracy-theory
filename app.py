@@ -26,6 +26,7 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///conspiracy.db")
 
+
 def calcpref(user):
     count = {"Politics": 0, "history": 0, "aliens": 0, "pop-culture": 0, "miscellaneous": 0}
     likes = db.execute("SELECT genre FROM likehistory WHERE user = ? and like = 1", user)
@@ -55,8 +56,8 @@ def calcpref(user):
         elif(x["genre"] == "miscellaneous"):
             count["miscellaneous"] = count["miscellaneous"] - 1
 
-    print(max(count, key=count.get))
     return max(count, key=count.get)
+
 
 def langcheck(content):
     f = open('blacklist.csv', 'rt')
@@ -69,6 +70,7 @@ def langcheck(content):
 
     f.close()
     return True
+
 
 @app.after_request
 def after_request(response):
@@ -86,7 +88,7 @@ def home():
     theories = db.execute("SELECT * FROM theories WHERE genre = ? ORDER BY upvotes DESC LIMIT 5", pref[0]["preference"])
     otherTheories = db.execute("SELECT * FROM theories WHERE genre != ? ORDER BY upvotes DESC LIMIT 5", pref[0]["preference"])
     theories = theories + otherTheories
-    
+
     random.shuffle(theories)
     return render_template("home.html", theories=theories)
 
@@ -99,7 +101,7 @@ def post():
         genre = request.form.get("Genre")
         content = request.form.get("post")
 
-        #checks for no repeat title
+        # checks for no repeat title
         titles = db.execute("SELECT name FROM theories WHERE name = ?", name)
         if (len(titles) > 0):
             return apology("Title already exists, please choose another title")
@@ -110,7 +112,8 @@ def post():
 
             date = db.execute("SELECT DATETIME()")
         
-            db.execute("INSERT INTO theories (name, user, content, date, id, genre) VALUES (?, ?, ?, ?, ?, ?)", name, username, content, date[0]["DATETIME()"], session["user_id"], genre)
+            db.execute("INSERT INTO theories (name, user, content, date, id, genre) VALUES (?, ?, ?, ?, ?, ?)",
+                       name, username, content, date[0]["DATETIME()"], session["user_id"], genre)
         else:
             return apology("Please refrain from using inappropriate language")
         
@@ -121,9 +124,11 @@ def post():
     else:
         return render_template("post.html")
 
+
 @app.route("/about")
 def about():
     return render_template("about.html")
+
 
 @app.route("/your-posts")
 @login_required
@@ -232,7 +237,8 @@ def questions():
         misc = q5 + q3
         popCult = q10 + q7
 
-        possibilityDict = {"Alien Believer": aliens,"Political Conspirator": politics, "Woke Historian": history, "One Who Can't Decide": misc,"Pop Culture Theorist": popCult}
+        possibilityDict = {"Alien Believer": aliens, "Political Conspirator": politics, 
+                           "Woke Historian": history, "One Who Can't Decide": misc, "Pop Culture Theorist": popCult}
         resultsList = []
         for key, value in possibilityDict.items():
             if value == max(possibilityDict.values()):
@@ -262,10 +268,12 @@ def questions():
         popCultPercent = int(popCult/userMin * 100)
 
         try:
-            db.execute("INSERT INTO quiz (username, alien, politics, history, misc, popcult, result) VALUES (?, ?, ?, ?, ?, ?, ?)", session["user_id"], alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString)
+            db.execute("INSERT INTO quiz (username, alien, politics, history, misc, popcult, result) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                       session["user_id"], alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString)
 
         except:
-            db.execute("UPDATE quiz SET alien = ?, politics = ?, history = ?, misc = ?, popcult = ?, result = ? WHERE username = ?", alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString, session["user_id"])
+            db.execute("UPDATE quiz SET alien = ?, politics = ?, history = ?, misc = ?, popcult = ?, result = ? WHERE username = ?",
+                       alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString, session["user_id"])
 
         if userMin == minScore:
             db.execute("UPDATE quiz SET skeptic = ? WHERE username = ?", 1, session["user_id"])
@@ -287,7 +295,6 @@ def questions():
 def results():
     if request.method == "POST":
         return redirect("/questions")
-    
     else:
         quizResults = db.execute("SELECT * FROM quiz WHERE username = ?", session["user_id"])
 
@@ -304,6 +311,7 @@ def results():
             results = quizResults[0]["result"]
 
         return render_template("results.html", results=results, quizResults=quizResults)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -347,7 +355,7 @@ def register():
 
 @app.route("/recents", methods=["GET", "POST"])
 @login_required
-def recents ():
+def recents():
     data = db.execute("SELECT * FROM theories ORDER BY date DESC LIMIT 10")
     if request.method == "GET":
         return render_template("recents.html", data=data)
