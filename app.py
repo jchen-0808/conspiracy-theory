@@ -25,20 +25,32 @@ Session(app)
 db = SQL("sqlite:///conspiracy.db")
 
 def calcpref(user):
-    count = {politics: "0", history: "0", aliens: "0", popculture: "0", miscellaneous: "0"}
-    likes = db.execute("SELECT genre FROM likehistory WHERE user = ?", user)
+    count = {"politics": 0, "history": 0, "aliens": 0, "popculture": 0, "miscellaneous": 0}
+    likes = db.execute("SELECT genre FROM likehistory WHERE user = ? and like = 1", user)
     for x in likes:
         if(x == "politics"):
-            count[politics] = count[politics] + 1
+            count["politics"] = count["politics"] + 1
         elif(x == "history"):
-            count[history] = count[history] + 1
+            count["history"] = count["history"] + 1
         elif(x == "aliens"):
-            count[aliens] = count[aliens] + 1
+            count["aliens"] = count["aliens"] + 1
         elif(x == "pop-culture"):
-            count[popculture] = count[popculture] + 1
+            count["popculture"] = count["popculture"] + 1
         else:
-            count[miscellaneous] = count[miscellaneous] + 1
-    return max(stats.items(), key=operator.itemgetter(1))[0]
+            count["miscellaneous"] = count["miscellaneous"] + 1
+    dislikes = db.execute("SELECT genre FROM likehistory WHERE user = ? and like = 0", user)
+    for x in dislikes:
+        if(x == "politics"):
+            count["politics"] = count["politics"] - 1
+        elif(x == "history"):
+            count["history"] = count["history"] - 1
+        elif(x == "aliens"):
+            count["aliens"] = count["aliens"] - 1
+        elif(x == "pop-culture"):
+            count["popculture"] = count["popculture"] - 1
+        else:
+            count["miscellaneous"] = count["miscellaneous"] - 1
+    return max(count, key=count.get)
 
 @app.after_request
 def after_request(response):
@@ -62,26 +74,31 @@ def home():
 def post():
     if request.method == "POST":
         name = request.form.get("name")
+        genre = request.form.get("Genre")
         content = request.form.get("post")
 
         # ensures all fields are filled
-        if name == "" or content == "":
+        if name == "" or content == "" or genre == "":
             return apology("Please complete all fields")
+
+        #checks for no repeat title
+        titles = db.execute("SELECT name FROM theories")
+        if (name in titles):
+            return apology("Title already exists, please choose another title")
         
         user = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
         username = user[0]["username"]
 
         date = db.execute("SELECT DATETIME()")
 
-        db.execute("INSERT INTO theories (name, user, content, date, id) VALUES (?, ?, ?, ?, ?)", name, username, content, date[0]["DATETIME()"], session["user_id"])
+        db.execute("INSERT INTO theories (name, user, content, date, id, genre) VALUES (?, ?, ?, ?, ?, ?)", name, username, content, date[0]["DATETIME()"], session["user_id"], genre)
         
         # Redirect user to home page
         return redirect("/recents")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        genres = {"politics", "history", "aliens", "pop-culture", "miscellaneous"}
-        return render_template("post.html", genres=genres)
+        return render_template("post.html")
 
 
 @app.route("/your-posts")
@@ -307,10 +324,9 @@ def register():
 @app.route("/recents", methods=["GET", "POST"])
 @login_required
 def recents ():
+    data = db.execute("SELECT * FROM theories ORDER BY date DESC LIMIT 10")
     if request.method == "GET":
-        data = db.execute("SELECT * FROM theories ORDER BY date DESC LIMIT 10")
         return render_template("recents.html", data=data)
-    
     else:
         name = request.form.get("name")
         genre = request.form.get("genre")
@@ -325,9 +341,12 @@ def recents ():
 
         elif request.form["dislike"] == "dislike":
             updatedvalue = int(request.form.get("dislikes")) + 1
+            newpref = calcpref(id)
             db.execute("UPDATE theories SET downvotes = ? WHERE name = ?", updatedvalue, name)
-            db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, username, 0, genre)
-        return redirect("/recents")
+            db.execute("INSERT INTO likehistory (theory, user, like, genre) VALUES (?, ?, ?, ?)", name, id, 0, genre)
+            db.execute("UPDATE users SET preference = ? WHERE id = ?", newpref, id)
+        
+        return render_template("recents.html", data=data)
 
 
 @app.route("/change", methods=["GET", "POST"])

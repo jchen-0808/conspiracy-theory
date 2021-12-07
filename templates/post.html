@@ -70,10 +70,12 @@
                     <br>
                     <div class="form-group">
                         <select form="userPost" name="Genre">
-                            <option disabled selected value="">Genre</option>
-                                {% for genre in genres %}
-                                <option value="{{ genre }}">{{ genre }}</option>
-                                {% endfor %}
+                            <option disabled selected value hidden="">Genre</option>
+                            <option value="politics">politics</option>
+                            <option value="history">history</option>
+                            <option value="aliens">aliens</option>
+                            <option value="pop-culture">pop-culture</option>
+                            <option value="miscellaneous">miscellaneous</option>
                         </select>
                     </div>
                     <br>

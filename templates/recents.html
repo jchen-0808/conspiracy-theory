@@ -63,6 +63,7 @@
                 <div class="container">
                     <form class="grey" action="/recents" id="like" method="post">
                         <h1 name="title" id="title" class="leftAlign crimson">{{ post.name }}</p>
+                        <p id="genre" class="black medium">{{ post.genre }}</p>
                         <p class="paragraph black">{{ post.content }}</p>
                         <p class="author darkgrey">posted by {{ post.user }}</p>
                         <p class="author darkgrey">{{ post.date }}</p>
@@ -70,9 +71,9 @@
                         <input type = "hidden" name = "likes" value = "{{ post.upvotes }}"/>
                         <input type = "hidden" name = "dislikes" value = "{{ post.downvotes }}"/>
                         <input type = "hidden" name = "name" value = "{{ post.name }}"/>
-                        <input type = "hidden" name = "name" value = "{{ post.genre }}"/>
-                        <button class="dislike" name="dislike" value="dislike" type="submit">Dislike</button>
-                        <button class="like" name="like" value="like" type="submit">Like</button>
+                        <input type = "hidden" name = "genre" value = "{{ post.genre }}"/>
+                        <button name="like" value="like" type="submit">Like</button>
+                        <button name="dislike" value="dislike" type="submit">Dislike</button>
                     </form>
                 </div>
   

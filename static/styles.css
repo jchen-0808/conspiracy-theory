@@ -40,6 +40,10 @@ nav .navbar-brand
     font-size: x-large;
 }
 
+.medium{
+    font-size: large;
+}
+
 .leftAlign{
     text-align: left;
     font-size: x-large;
