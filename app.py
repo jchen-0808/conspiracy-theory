@@ -300,18 +300,18 @@ def questions():
         except:
             db.execute("UPDATE quiz SET alien = ?, politics = ?, history = ?, misc = ?, popcult = ?, result = ? WHERE username = ?",
                        alienPercent, politicsPercent, historyPercent, miscPercent, popCultPercent, resultString, session["user_id"])
-
-        # checks for special score cases: if user answers 1 in everything, they are skeptic
-        if userMin == minScore:
-            db.execute("UPDATE quiz SET skeptic = ? WHERE username = ?", 1, session["user_id"])
-
-        # if user answers 5 on everything they are a true believer
-        elif userMin == maxScore:
-            db.execute("UPDATE quiz SET believer = ? WHERE username = ?", 1, session["user_id"])
         
         # if user answsers the same on all questions but values aren't 1 or 5 they are well-rounded
-        elif alienPercent == politicsPercent and alienPercent == historyPercent and alienPercent == miscPercent and alienPercent == popCultPercent:
-            db.execute("UPDATE quiz SET wellround = ? WHERE username = ?", 1, session["user_id"])
+        if alienPercent == politicsPercent and alienPercent == historyPercent and alienPercent == miscPercent and alienPercent == popCultPercent:
+            db.execute("UPDATE quiz SET wellround = ?, believer = ?, skeptic = ? WHERE username = ?", 1, 0, 0, session["user_id"])
+
+            # checks for special score cases: if user answers 1 in everything, they are skeptic
+            if userMin == minScore:
+                db.execute("UPDATE quiz SET skeptic = ?, believer = ? WHERE username = ?", 1, 0, session["user_id"])
+
+            # if user answers 5 on everything they are a true believer
+            elif userMin == maxScore:
+                db.execute("UPDATE quiz SET believer = ?, skeptic = ? WHERE username = ?", 1, 0, session["user_id"])
 
         # updates values in database in case it's not the user's first time completing the quiz
         else:
