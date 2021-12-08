@@ -330,7 +330,6 @@ def results():
         # redirects to questions if user wants to take the quiz again
         return redirect("/questions")
 
-
     else:
         # finds results of the quiz
         quizResults = db.execute("SELECT * FROM quiz WHERE username = ?", session["user_id"])

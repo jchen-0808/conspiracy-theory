@@ -17,12 +17,15 @@
         <title>Conspiracy Theories {% block title %}{% endblock %}</title>
 
     </head>
+
     <style>
+
         body {
             animation: fadeInAnimation ease 2s;
             animation-iteration-count: 1;
             animation-fill-mode: forwards;
         }
+
         @keyframes fadeInAnimation {
             0% {
                 opacity: 0;
@@ -31,17 +34,23 @@
                 opacity: 1;
             }
         }
+
     </style>
+
     <body>
 
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
+            
             <div class="container-fluid">
+
                 <a class="navbar-brand" href="/">
                     <img src="https://i.imgur.com/H2uGKab.png" alt="">
                 </a>
+
                 <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div` class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
                         <ul class="navbar-nav me-auto mt-2">
@@ -52,31 +61,30 @@
                             <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
                             <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                         </ul>
+
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/change">Change Password</a></li>
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
+
                     {% else %}
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
                             <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                         </ul>
                     {% endif %}
+
                 </div>
             </div>
         </nav>
 
-        {% if get_flashed_messages() %}
-            <header>
-                <div class="alert alert-primary mb-0 text-center" role="alert">
-                    {{ get_flashed_messages() | join(" ") }}
-                </div>
-            </header>
-        {% endif %}
 
         <main class="container-fluid py-5 text-center">
+            
             {% block main %}
+            
             <form action="/quiz" method="post">
+               
                 <div class="votes">
                     <p class="crimson">Take the quiz to find out what kind of conspiracy theorist you are!</p> 
                     <p class="crimson">possible results:</p>
@@ -89,9 +97,13 @@
                     <p>the true believer</p>
                     <p>the well-rounder
                 </div>
+
                 <button class="btn btn-primary" type="submit">start</button>
+
             </form>
+
             {% endblock %}
+            
         </main>
 
         <footer class="mb-5 small text-center text-muted">

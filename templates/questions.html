@@ -24,8 +24,10 @@
 
         if(el_autohide){
             var last_scroll_top = 0;
+            
             window.addEventListener('scroll', function() {
                 let scroll_top = window.scrollY;
+                
                 if(scroll_top < last_scroll_top) {
                     el_autohide.classList.remove('scrolled-down');
                     el_autohide.classList.add('scrolled-up');
@@ -34,17 +36,21 @@
                     el_autohide.classList.remove('scrolled-up');
                     el_autohide.classList.add('scrolled-down');
                 }
+                
             last_scroll_top = scroll_top;
             }); 
         }
     }); 
+
     </script>
+
     <style>
         body {
             animation: fadeInAnimation ease 2s;
             animation-iteration-count: 1;
             animation-fill-mode: forwards;
         }
+
         @keyframes fadeInAnimation {
             0% {
                 opacity: 0;
@@ -53,7 +59,9 @@
                 opacity: 1;
             }
         }
+
     </style>
+
     <body>
         <nav class="autohide navbar navbar-expand-lg bg-light border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
@@ -68,7 +76,9 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbar">
+
                     {% if session["user_id"] %}
+
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="/recents">Recents</a></li>
@@ -77,34 +87,34 @@
                             <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
                             <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                         </ul>
+
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/change">Change Password</a></li>
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
+
                     {% else %}
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
                             <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                         </ul>
                     {% endif %}
+
                 </div>
             </div>
         </nav>
 
-        {% if get_flashed_messages() %}
-            <header>
-                <div class="alert alert-primary mb-0 text-center" role="alert">
-                    {{ get_flashed_messages() | join(" ") }}
-                </div>
-            </header>
-        {% endif %}
 
         <main class="container-fluid py-5 text-center">
+            
             {% block main %}
+
                 <form action="/questions" name="questions" id="questions" method="post">
+                    
                     <div class="form-group votes">
                         <p class="crimson">On a scale from 1-5 rate the following options on how believable they are. 1 is not believable, 5 is 99.99% true</p>
                         <label name="question1">Aliens exist in area 51 and the US government is hiding it from us.</label>
+                        
                         <select form="questions" name="q1" id="q1" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -113,9 +123,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question2">The CIA assassinated multiple famous historical civil rights activits such as Martin Luther King jr. and Malcolm X</label>
+                        
                         <select form="questions" name="q2" id="q2" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -124,9 +136,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question3">Rabbits are evil. They are monitoring our every move to plot to take over against humanity.</label>
+                        
                         <select form="questions" name="q3" id="q3" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -135,9 +149,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question4">The moon landing was fake. The US did it to display their superiority over the Soviet Union.</label>
+                        
                         <select form="questions" name="q4" id="q4" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -146,9 +162,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question5">We live in a simulation. Bigger, technological-advanced beings are watching us right now to see what happens to our world.</label>
+                        
                         <select form="questions" name="q5" id="q5" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -157,9 +175,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question6">The Men in Black really do exist and are wiping our memories of alien activity.</label>
+                        
                         <select form="questions" name="q6" id="q6" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -168,9 +188,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question7">Birds aren’t real. They are government drones that are secretly spying on us.</label>
+                        
                         <select form="questions" name="q7" id="q7" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -179,9 +201,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question8">The Illuminati has been a historic brotherhood that controlled the world from the Vatican.</label>
+                        
                         <select form="questions" name="q8" id="q8" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -190,9 +214,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question9">There is an FBI agent watching you through your phone camera right now.</label>
+                        
                         <select form="questions" name="q9" id="q9" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -201,9 +227,11 @@
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+
                         <br>
                         <br>
                         <label name="question10">Thanos was right. Eliminating half the world would solve the lack of resources.</label>
+                        
                         <select form="questions" name="q10" id="q10" required>
                             <option disabled selected value="">rating</option>
                             <option value="1">1</option>
@@ -216,8 +244,11 @@
                     </div>
                     <br>
                         <button class="btn btn-primary" type="submit">Submit</button>
+
                 </form>
+
             {% endblock %}
+
         </main>
 
         <footer class="mb-5 small text-center text-muted">
@@ -225,6 +256,5 @@
         </footer>
 
     </body>
-
 
 </html>

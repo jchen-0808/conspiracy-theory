@@ -18,11 +18,13 @@
 
     </head>
     <style>
+
         body {
             animation: fadeInAnimation ease 2s;
             animation-iteration-count: 1;
             animation-fill-mode: forwards;
         }
+
         @keyframes fadeInAnimation {
             0% {
                 opacity: 0;
@@ -31,20 +33,25 @@
                 opacity: 1;
             }
         }
-    </style>
-    <body>
 
-        <nav class="bg-light border navbar navbar-expand-md navbar-light">
+    </style>
+
+    <body>
+        <nav class="autohide navbar navbar-expand-lg bg-light navbar-light">
             <div class="container-fluid">
+
                 <a class="navbar-brand" href="/">
                     <img src="https://i.imgur.com/H2uGKab.png" alt="">
                 </a>
-                <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+    
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"] %}
-                        <ul class="navbar-nav me-auto mt-2">
+
+                        <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="/recents">Recents</a></li>
                             <li class="nav-item"><a class="nav-link" href="/post">Post</a></li>
@@ -52,40 +59,40 @@
                             <li class="nav-item"><a class="nav-link" href="/your-posts">Your Posts</a></li>
                             <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
                         </ul>
-                        <ul class="navbar-nav ms-auto mt-2">
+
+                        <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/change">Change Password</a></li>
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                         </ul>
+
                     {% else %}
-                        <ul class="navbar-nav ms-auto mt-2">
+
+                        <ul class="navbar-nav ms-auto">
                             <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
                             <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                         </ul>
+
                     {% endif %}
+
                 </div>
             </div>
         </nav>
 
-        {% if get_flashed_messages() %}
-            <header>
-                <div class="alert alert-primary mb-0 text-center" role="alert">
-                    {{ get_flashed_messages() | join(" ") }}
-                </div>
-            </header>
-        {% endif %}
-
         <main class="container-fluid py-5 text-center">
             {% block main %}
+
             <div class="container">
                 <h1 class="crimson">Post your conspiracy theories!</h1>
                 <br>
             </div>
+
             <div>
                 <form action="/post" id="userPost" method="post">
                     <h1 class="center">Title</h1>
                     <input form="userPost" name="name" id="name"></input>
                     <br>
                     <br>
+
                     <div class="form-group">
                         <select form="userPost" name="Genre">
                             <option value="miscellaneous">Miscellaneous</option>
@@ -95,6 +102,7 @@
                             <option value="pop-culture">Pop-culture</option>
                         </select>
                     </div>
+
                     <br>
                     <div>
                         <h2 class="center">Description of conspiracy</h2>
@@ -102,11 +110,14 @@
                             <textarea form="userPost" rows="10" cols="80" name="post" id="post"></textarea>
                         </div>
                     </div>
+
                     <br>
                         <button class="btn btn-primary" type="submit">Post</button>
                 </form>
             </div>
+            
             {% endblock %}
+            
         </main>
 
         <footer class="mb-5 small text-center text-muted">
